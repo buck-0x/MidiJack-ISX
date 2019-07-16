@@ -3,7 +3,7 @@ This package contains third-party software components governed by the license(s)
 
 Component Name: MidiJack
 
-License Type: N/A
+License Type: MIT
 
 Copyright (C) 2013-2015 Keijiro Takahashi
 
