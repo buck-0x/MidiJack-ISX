@@ -1,0 +1,10 @@
+{
+	"name": "com.redthawn.midi-jack-isx",
+	"displayName":"MidiJack-ISX",
+	"version": "0.1.0-preview",
+	"unity": "2019.2",
+	"description": "Ports Midi input from Keijiro's MidiJack package into Unity's new Input System Package.",
+	"dependencies": {
+
+	}
+}
