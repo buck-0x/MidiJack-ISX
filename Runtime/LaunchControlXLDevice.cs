@@ -1,11 +1,12 @@
 using MidiJack;
+using MidiJackISX;
 using UnityEditor;
+using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
 using UnityEngine.InputSystem.Layouts;
-using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.InputSystem.Utilities;
 
-namespace UnityEngine.InputSystem.LowLevel
+namespace MidiJackISX
 {
     public struct LaunchControlXLDeviceState : IInputStateTypeInfo
     {
@@ -92,7 +93,7 @@ namespace UnityEngine.InputSystem
     [InputControlLayout(stateType = typeof(LaunchControlXLDeviceState), isGenericTypeOfDevice = true, displayName = "Novation Launch Control XL")]
     public class LaunchControlXLDevice : InputDevice
     {
-        public static LaunchControlXLDevice Current { get; private set; }
+        public static LaunchControlXLDevice current { get; private set; }
 
         static LaunchControlXLDevice()
         {
@@ -101,17 +102,17 @@ namespace UnityEngine.InputSystem
             InputSystem.onBeforeUpdate += CreateDevice;
         }
 
-        private static void CreateDevice(InputUpdateType obj)
+        static void CreateDevice(InputUpdateType obj)
         {
             InputSystem.onBeforeUpdate -= CreateDevice;
-            if (Current == null)
+            if (current == null)
             {
                 InputSystem.AddDevice<LaunchControlXLDevice>().MakeCurrent();
             }
         }
 
         [RuntimeInitializeOnLoadMethod]
-        private static void Register() { }
+        static void Register() { }
 
         public AxisControl SendA1Axis { get; private set; }
         public AxisControl SendA2Axis { get; private set; }
@@ -149,7 +150,7 @@ namespace UnityEngine.InputSystem
         public AxisControl Slider7Axis { get; private set; }
         public AxisControl Slider8Axis { get; private set; }
 
-        private LaunchControlXLDeviceState mState;
+        LaunchControlXLDeviceState m_State;
 
         protected override void FinishSetup(InputDeviceBuilder builder)
         {
@@ -190,56 +191,54 @@ namespace UnityEngine.InputSystem
             Slider8Axis = builder.GetControl<AxisControl>("Slider8");
 
             InputSystem.onAfterUpdate += FireDefaultState;
-
         }
 
-        private void FireDefaultState(InputUpdateType obj)
+        void FireDefaultState(InputUpdateType obj)
         {
             InputSystem.onAfterUpdate -= FireDefaultState;
 
-            mState.Slider1 = 0.5f;
-            mState.Slider2 = 0.5f;
-            mState.Slider3 = 0.5f;
-            mState.Slider4 = 0.5f;
-            mState.Slider5 = 0.5f;
-            mState.Slider6 = 0.5f;
-            mState.Slider7 = 0.5f;
-            mState.Slider8 = 0.5f;
+            m_State.Slider1 = 0.5f;
+            m_State.Slider2 = 0.5f;
+            m_State.Slider3 = 0.5f;
+            m_State.Slider4 = 0.5f;
+            m_State.Slider5 = 0.5f;
+            m_State.Slider6 = 0.5f;
+            m_State.Slider7 = 0.5f;
+            m_State.Slider8 = 0.5f;
 
-            mState.PanDevice1 = 0.5f;
-            mState.PanDevice2 = 0.5f;
-            mState.PanDevice3 = 0.5f;
-            mState.PanDevice4 = 0.5f;
-            mState.PanDevice5 = 0.5f;
-            mState.PanDevice6 = 0.5f;
-            mState.PanDevice7 = 0.5f;
-            mState.PanDevice8 = 0.5f;
+            m_State.PanDevice1 = 0.5f;
+            m_State.PanDevice2 = 0.5f;
+            m_State.PanDevice3 = 0.5f;
+            m_State.PanDevice4 = 0.5f;
+            m_State.PanDevice5 = 0.5f;
+            m_State.PanDevice6 = 0.5f;
+            m_State.PanDevice7 = 0.5f;
+            m_State.PanDevice8 = 0.5f;
 
-            mState.SendA1 = 0.5f;
-            mState.SendA2 = 0.5f;
-            mState.SendA3 = 0.5f;
-            mState.SendA4 = 0.5f;
-            mState.SendA5 = 0.5f;
-            mState.SendA6 = 0.5f;
-            mState.SendA7 = 0.5f;
-            mState.SendA8 = 0.5f;
+            m_State.SendA1 = 0.5f;
+            m_State.SendA2 = 0.5f;
+            m_State.SendA3 = 0.5f;
+            m_State.SendA4 = 0.5f;
+            m_State.SendA5 = 0.5f;
+            m_State.SendA6 = 0.5f;
+            m_State.SendA7 = 0.5f;
+            m_State.SendA8 = 0.5f;
 
-            mState.SendB1 = 0.5f;
-            mState.SendB2 = 0.5f;
-            mState.SendB3 = 0.5f;
-            mState.SendB4 = 0.5f;
-            mState.SendB5 = 0.5f;
-            mState.SendB6 = 0.5f;
-            mState.SendB7 = 0.5f;
-            mState.SendB8 = 0.5f;
+            m_State.SendB1 = 0.5f;
+            m_State.SendB2 = 0.5f;
+            m_State.SendB3 = 0.5f;
+            m_State.SendB4 = 0.5f;
+            m_State.SendB5 = 0.5f;
+            m_State.SendB6 = 0.5f;
+            m_State.SendB7 = 0.5f;
+            m_State.SendB8 = 0.5f;
 
-            InputSystem.QueueStateEvent(this, mState);
+            InputSystem.QueueStateEvent(this, m_State);
         }
 
         protected override void OnAdded()
         {
             MidiMaster.knobDelegate += KnobDelegate;
-            base.OnAdded();
         }
 
         protected override void OnRemoved()
@@ -249,115 +248,113 @@ namespace UnityEngine.InputSystem
 
         public override void MakeCurrent()
         {
-            base.MakeCurrent();
-            Current = this;
+            current = this;
         }
 
-        private void KnobDelegate(MidiChannel channel, int knobnumber, float knobvalue)
+        void KnobDelegate(MidiChannel channel, int knobnumber, float knobvalue)
         {
-
-            bool publishEvent = true;
+            var publishEvent = true;
 
             switch (knobnumber)
             {
                 case 0x0D:
-                    mState.SendA1 = knobvalue;
+                    m_State.SendA1 = knobvalue;
                     break;
                 case 0x0E:
-                    mState.SendA2 = knobvalue;
+                    m_State.SendA2 = knobvalue;
                     break;
                 case 0x0F:
-                    mState.SendA3 = knobvalue;
+                    m_State.SendA3 = knobvalue;
                     break;
                 case 0x10:
-                    mState.SendA4 = knobvalue;
+                    m_State.SendA4 = knobvalue;
                     break;
                 case 0x11:
-                    mState.SendA5 = knobvalue;
+                    m_State.SendA5 = knobvalue;
                     break;
                 case 0x12:
-                    mState.SendA6 = knobvalue;
+                    m_State.SendA6 = knobvalue;
                     break;
                 case 0x13:
-                    mState.SendA7 = knobvalue;
+                    m_State.SendA7 = knobvalue;
                     break;
                 case 0x14:
-                    mState.SendA8 = knobvalue;
+                    m_State.SendA8 = knobvalue;
                     break;
 
                 case 0x1D:
-                    mState.SendB1 = knobvalue;
+                    m_State.SendB1 = knobvalue;
                     break;
                 case 0x1E:
-                    mState.SendB2 = knobvalue;
+                    m_State.SendB2 = knobvalue;
                     break;
                 case 0x1F:
-                    mState.SendB3 = knobvalue;
+                    m_State.SendB3 = knobvalue;
                     break;
                 case 0x20:
-                    mState.SendB4 = knobvalue;
+                    m_State.SendB4 = knobvalue;
                     break;
                 case 0x21:
-                    mState.SendB5 = knobvalue;
+                    m_State.SendB5 = knobvalue;
                     break;
                 case 0x22:
-                    mState.SendB6 = knobvalue;
+                    m_State.SendB6 = knobvalue;
                     break;
                 case 0x23:
-                    mState.SendB7 = knobvalue;
+                    m_State.SendB7 = knobvalue;
                     break;
                 case 0x24:
-                    mState.SendB8 = knobvalue;
+                    m_State.SendB8 = knobvalue;
                     break;
 
                 case 0x31:
-                    mState.PanDevice1 = knobvalue;
+                    m_State.PanDevice1 = knobvalue;
                     break;
                 case 0x32:
-                    mState.PanDevice2 = knobvalue;
+                    m_State.PanDevice2 = knobvalue;
                     break;
                 case 0x33:
-                    mState.PanDevice3 = knobvalue;
+                    m_State.PanDevice3 = knobvalue;
                     break;
                 case 0x34:
-                    mState.PanDevice4 = knobvalue;
+                    m_State.PanDevice4 = knobvalue;
                     break;
                 case 0x35:
-                    mState.PanDevice5 = knobvalue;
+                    m_State.PanDevice5 = knobvalue;
                     break;
                 case 0x36:
-                    mState.PanDevice6 = knobvalue;
+                    m_State.PanDevice6 = knobvalue;
                     break;
                 case 0x37:
-                    mState.PanDevice7 = knobvalue;
+                    m_State.PanDevice7 = knobvalue;
                     break;
                 case 0x38:
-                    mState.PanDevice8 = knobvalue;
+                    m_State.PanDevice8 = knobvalue;
                     break;
 
                 case 0x4D:
-                    mState.Slider1 = knobvalue;
+                    m_State.Slider1 = knobvalue;
                     break;
                 case 0x4E:
-                    mState.Slider2 = knobvalue;
+                    m_State.Slider2 = knobvalue;
                     break;
                 case 0x4F:
-                    mState.Slider3 = knobvalue;
+                    m_State.Slider3 = knobvalue;
                     break;
                 case 0x50:
-                    mState.Slider4 = knobvalue;
+                    m_State.Slider4 = knobvalue;
                     break;
                 case 0x51:
-                    mState.Slider5 = knobvalue;
+                    m_State.Slider5 = knobvalue;
                     break;
                 case 0x52:
-                    mState.Slider6 = knobvalue;
+                    m_State.Slider6 = knobvalue;
                     break;
                 case 0x53:
-                    mState.Slider7 = knobvalue;
+                    m_State.Slider7 = knobvalue;
                     break;
                 case 0x54:
-                    mState.Slider8 = knobvalue;
+                    m_State.Slider8 = knobvalue;
                     break;
 
                 default:
@@ -367,7 +364,7 @@ namespace UnityEngine.InputSystem
 
             if (publishEvent)
             {
-                InputSystem.QueueStateEvent(this, mState);
+                InputSystem.QueueStateEvent(this, m_State);
             }
         }
     }

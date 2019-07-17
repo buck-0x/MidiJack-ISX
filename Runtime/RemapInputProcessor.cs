@@ -16,7 +16,7 @@ namespace MidiJackISX
         }
 
         [RuntimeInitializeOnLoadMethod]
-        private static void Register() { }
+        static void Register() { }
 
         public override float Process(float value, InputControl<float> control)
         {
