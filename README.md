@@ -8,7 +8,7 @@ Currently this only works for [Novation's Launch Control XL](https://novationmus
 
 ### Setup
 
-1. Install the [MidiJack package](https://github.com/keijiro/MidiJack/tree/upm) using Project Manager [Git URLs](https://docs.unity3d.com/Manual/upm-git.html)
+1. Install the [MidiJack package](https://github.com/keijiro/MidiJack/tree/upm) using Package Manager [Git URLs](https://docs.unity3d.com/Manual/upm-git.html)
 2. Install the Input System via the Package Manager. The latest tested version is `0.2.10-preview`
 3. Go to `Edit > Project Settings... > Input System Package` and add `LaunchControlXLDevice` to `Supported Devices`
 4. In an Input asset, create a new Action and select from one of the Midi controller's controls
