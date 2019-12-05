@@ -12,13 +12,13 @@ namespace MidiJackISX
 
         static RemapInputProcessor()
         {
-            InputSystem.RegisterControlProcessor<RemapInputProcessor>();
+            InputSystem.RegisterProcessor<RemapInputProcessor>();
         }
 
         [RuntimeInitializeOnLoadMethod]
         static void Register() { }
 
-        public override float Process(float value, InputControl<float> control)
+        public override float Process(float value, InputControl control)
         {
             return Mathf.Lerp(min, max, value);
         }
