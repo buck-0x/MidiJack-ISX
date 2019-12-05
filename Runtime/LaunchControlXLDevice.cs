@@ -4,6 +4,7 @@ using UnityEditor;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
 using UnityEngine.InputSystem.Layouts;
+using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.InputSystem.Utilities;
 
 namespace MidiJackISX
@@ -11,9 +12,12 @@ namespace MidiJackISX
     public struct LaunchControlXLDeviceState : IInputStateTypeInfo
     {
         public static FourCC kFormat => new FourCC('M', 'I', 'D', 'I');
-        public FourCC GetFormat()
+        public FourCC format
         {
-            return kFormat;
+            get
+            {
+                return kFormat;
+            }
         }
 
         [InputControl(layout = "Axis", usage = "Twist", defaultState = "0.5")]
@@ -102,7 +106,7 @@ namespace UnityEngine.InputSystem
             InputSystem.onBeforeUpdate += CreateDevice;
         }
 
-        static void CreateDevice(InputUpdateType obj)
+        static void CreateDevice()
         {
             InputSystem.onBeforeUpdate -= CreateDevice;
             if (current == null)
@@ -152,48 +156,48 @@ namespace UnityEngine.InputSystem
 
         LaunchControlXLDeviceState m_State;
 
-        protected override void FinishSetup(InputDeviceBuilder builder)
+        protected override void FinishSetup()
         {
-            SendA1Axis = builder.GetControl<AxisControl>("SendA1");
-            SendA2Axis = builder.GetControl<AxisControl>("SendA2");
-            SendA3Axis = builder.GetControl<AxisControl>("SendA3");
-            SendA4Axis = builder.GetControl<AxisControl>("SendA4");
-            SendA5Axis = builder.GetControl<AxisControl>("SendA5");
-            SendA6Axis = builder.GetControl<AxisControl>("SendA6");
-            SendA7Axis = builder.GetControl<AxisControl>("SendA7");
-            SendA8Axis = builder.GetControl<AxisControl>("SendA8");
+            SendA1Axis = GetChildControl<AxisControl>("SendA1");
+            SendA2Axis = GetChildControl<AxisControl>("SendA2");
+            SendA3Axis = GetChildControl<AxisControl>("SendA3");
+            SendA4Axis = GetChildControl<AxisControl>("SendA4");
+            SendA5Axis = GetChildControl<AxisControl>("SendA5");
+            SendA6Axis = GetChildControl<AxisControl>("SendA6");
+            SendA7Axis = GetChildControl<AxisControl>("SendA7");
+            SendA8Axis = GetChildControl<AxisControl>("SendA8");
 
-            SendB1Axis = builder.GetControl<AxisControl>("SendB1");
-            SendB2Axis = builder.GetControl<AxisControl>("SendB2");
-            SendB3Axis = builder.GetControl<AxisControl>("SendB3");
-            SendB4Axis = builder.GetControl<AxisControl>("SendB4");
-            SendB5Axis = builder.GetControl<AxisControl>("SendB5");
-            SendB6Axis = builder.GetControl<AxisControl>("SendB6");
-            SendB7Axis = builder.GetControl<AxisControl>("SendB7");
-            SendB8Axis = builder.GetControl<AxisControl>("SendB8");
+            SendB1Axis = GetChildControl<AxisControl>("SendB1");
+            SendB2Axis = GetChildControl<AxisControl>("SendB2");
+            SendB3Axis = GetChildControl<AxisControl>("SendB3");
+            SendB4Axis = GetChildControl<AxisControl>("SendB4");
+            SendB5Axis = GetChildControl<AxisControl>("SendB5");
+            SendB6Axis = GetChildControl<AxisControl>("SendB6");
+            SendB7Axis = GetChildControl<AxisControl>("SendB7");
+            SendB8Axis = GetChildControl<AxisControl>("SendB8");
 
-            PanDevice1Axis = builder.GetControl<AxisControl>("PanDevice1");
-            PanDevice2Axis = builder.GetControl<AxisControl>("PanDevice2");
-            PanDevice3Axis = builder.GetControl<AxisControl>("PanDevice3");
-            PanDevice4Axis = builder.GetControl<AxisControl>("PanDevice4");
-            PanDevice5Axis = builder.GetControl<AxisControl>("PanDevice5");
-            PanDevice6Axis = builder.GetControl<AxisControl>("PanDevice6");
-            PanDevice7Axis = builder.GetControl<AxisControl>("PanDevice7");
-            PanDevice8Axis = builder.GetControl<AxisControl>("PanDevice8");
+            PanDevice1Axis = GetChildControl<AxisControl>("PanDevice1");
+            PanDevice2Axis = GetChildControl<AxisControl>("PanDevice2");
+            PanDevice3Axis = GetChildControl<AxisControl>("PanDevice3");
+            PanDevice4Axis = GetChildControl<AxisControl>("PanDevice4");
+            PanDevice5Axis = GetChildControl<AxisControl>("PanDevice5");
+            PanDevice6Axis = GetChildControl<AxisControl>("PanDevice6");
+            PanDevice7Axis = GetChildControl<AxisControl>("PanDevice7");
+            PanDevice8Axis = GetChildControl<AxisControl>("PanDevice8");
 
-            Slider1Axis = builder.GetControl<AxisControl>("Slider1");
-            Slider2Axis = builder.GetControl<AxisControl>("Slider2");
-            Slider3Axis = builder.GetControl<AxisControl>("Slider3");
-            Slider4Axis = builder.GetControl<AxisControl>("Slider4");
-            Slider5Axis = builder.GetControl<AxisControl>("Slider5");
-            Slider6Axis = builder.GetControl<AxisControl>("Slider6");
-            Slider7Axis = builder.GetControl<AxisControl>("Slider7");
-            Slider8Axis = builder.GetControl<AxisControl>("Slider8");
+            Slider1Axis = GetChildControl<AxisControl>("Slider1");
+            Slider2Axis = GetChildControl<AxisControl>("Slider2");
+            Slider3Axis = GetChildControl<AxisControl>("Slider3");
+            Slider4Axis = GetChildControl<AxisControl>("Slider4");
+            Slider5Axis = GetChildControl<AxisControl>("Slider5");
+            Slider6Axis = GetChildControl<AxisControl>("Slider6");
+            Slider7Axis = GetChildControl<AxisControl>("Slider7");
+            Slider8Axis = GetChildControl<AxisControl>("Slider8");
 
             InputSystem.onAfterUpdate += FireDefaultState;
         }
 
-        void FireDefaultState(InputUpdateType obj)
+        void FireDefaultState()
         {
             InputSystem.onAfterUpdate -= FireDefaultState;
 
